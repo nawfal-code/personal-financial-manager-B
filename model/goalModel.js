@@ -31,7 +31,6 @@ const goalSchema = new mongoose.Schema(
       },
     },
 
-    // 🆕 DURATION-BASED GOAL
     durationValue: {
       type: Number,
       required: true,
@@ -53,6 +52,14 @@ const goalSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    // 🔹 Savings History
+    savingsHistory: [
+      {
+        amount: { type: Number, required: true },
+        date: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );
