@@ -99,3 +99,41 @@ export const updateBudget = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+// Recalculate all budgets of a user
+export const recalculateAllBudgets = async (req, res) => {
+  try {
+    const budgets = await Budget.find({ userId: req.user });
+
+    const now = new Date();
+
+    for (const budget of budgets) {
+      let start, end;
+
+      if (budget.period === "monthly") {
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      } else if (budget.period === "yearly") {
+        start = new Date(now.getFullYear(), 0, 1);
+        end = new Date(now.getFullYear(), 11, 31);
+      }
+
+      const expenses = await Expense.find({
+        userId: req.user,
+        category: budget.category,
+        date: { $gte: start, $lte: end },
+      });
+
+      budget.spentAmount = expenses.reduce(
+        (sum, e) => sum + e.amount,
+        0
+      );
+
+      await budget.save();
+    }
+
+    res.json({ message: "All budgets recalculated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
