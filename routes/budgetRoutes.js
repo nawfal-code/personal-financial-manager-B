@@ -1,4 +1,3 @@
-// routes/budgetRoutes.js
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import {
@@ -7,37 +6,29 @@ import {
   updateBudgetSpentAmount,
   updateBudget,
   deleteBudget,
-  recalculateAllBudgets
+  recalculateAllBudgets,
 } from "../controllers/budgetController.js";
 
 const router = express.Router();
 
-/* ==========================
-   PROTECT ALL BUDGET ROUTES
-========================== */
 router.use(authMiddleware);
 
-/* ==========================
-   BUDGET ROUTES
-========================== */
-
-// 1️⃣ Create new budget
+// Create budget
 router.post("/", createBudget);
 
-// 2️⃣ Get all budgets of logged user
+// Get budgets
 router.get("/", getBudgets);
 
-// 3️⃣ Recalculate spent amount on a budget
+// Recalculate single budget
 router.patch("/:id/recalculate", updateBudgetSpentAmount);
 
-// 4️⃣ Update budget fields (category, limit etc.)
-router.put("/:id", updateBudget);
-
-// 5️⃣ Delete budget
-router.delete("/:id", deleteBudget);
-
-// 6  Recalculate all budgets (NEW)
+// Recalculate ALL budgets 
 router.patch("/recalculate-all", recalculateAllBudgets);
 
-export default router;
+// Update budget
+router.put("/:id", updateBudget);
 
+// Delete budget
+router.delete("/:id", deleteBudget);
+
+export default router;
