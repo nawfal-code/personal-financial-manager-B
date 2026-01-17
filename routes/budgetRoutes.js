@@ -13,22 +13,17 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
-// Create budget
+// CREATE
 router.post("/", createBudget);
 
-// Get budgets
+// READ
 router.get("/", getBudgets);
 
-// Recalculate single budget
-router.patch("/:id/recalculate", updateBudgetSpentAmount);
-
-// Recalculate ALL budgets 
 router.patch("/recalculate-all", recalculateAllBudgets);
 
-// Update budget
+// THEN DYNAMIC ROUTES
+router.patch("/:id/recalculate", updateBudgetSpentAmount);
 router.put("/:id", updateBudget);
-
-// Delete budget
 router.delete("/:id", deleteBudget);
 
 export default router;
