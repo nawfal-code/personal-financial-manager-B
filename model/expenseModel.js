@@ -13,9 +13,9 @@ const expenseSchema = new mongoose.Schema(
       min: [0, "Amount must be positive"],
     },
     category: {
-      type: String,
-      enum: ["Groceries", "Food", "Rent", "Transport", "Shopping", "Other"],
+      type: String, // ❌ removed enum to allow dynamic categories
       required: true,
+      trim: true,
     },
     description: {
       type: String,
@@ -36,13 +36,8 @@ const expenseSchema = new mongoose.Schema(
       default: "monthly",
     },
   },
-  {
-    timestamps: true, // adds createdAt and updatedAt
-  }
+  { timestamps: true }
 );
 
-
-
 const Expense = mongoose.model("Expense", expenseSchema);
-
 export default Expense;
