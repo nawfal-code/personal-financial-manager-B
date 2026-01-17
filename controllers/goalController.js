@@ -1,43 +1,30 @@
 import Goal from "../model/goalModel.js";
 
 // ==========================
-// Create Goal
-// ==========================
 export const createGoal = async (req, res) => {
   try {
-    const { title, targetAmount, deadline, description } = req.body;
+    const {
+      title,
+      targetAmount,
+      durationValue,
+      durationUnit,
+      description,
+    } = req.body;
 
-    if (!title || !targetAmount || !deadline) {
-      return res
-        .status(400)
-        .json({ message: "Title, target amount and deadline are required" });
-    }
-
-    if (targetAmount <= 0) {
-      return res
-        .status(400)
-        .json({ message: "Target amount must be positive" });
-    }
-
-    if (new Date(deadline) < new Date()) {
-      return res
-        .status(400)
-        .json({ message: "Deadline must be in the future" });
+    if (!title || !targetAmount || !durationValue || !durationUnit) {
+      return res.status(400).json({ message: "All required fields missing" });
     }
 
     const goal = await Goal.create({
       userId: req.user,
       title,
       targetAmount,
-      deadline,
-      description: description || "",
-      savedAmount: 0,
+      durationValue,
+      durationUnit,
+      description,
     });
 
-    res.status(201).json({
-      message: "Goal created successfully",
-      goal,
-    });
+    res.status(201).json({ message: "Goal created", goal });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -103,52 +90,17 @@ export const updateGoalProgress = async (req, res) => {
 // ==========================
 export const editGoal = async (req, res) => {
   try {
-    const { title, targetAmount, deadline, description } = req.body;
+    const updated = await Goal.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user },
+      req.body,
+      { new: true }
+    );
 
-    const goal = await Goal.findOne({
-      _id: req.params.id,
-      userId: req.user,
-    });
-
-    if (!goal) {
+    if (!updated) {
       return res.status(404).json({ message: "Goal not found" });
     }
 
-    if (!title || !targetAmount || !deadline) {
-      return res
-        .status(400)
-        .json({ message: "Title, target amount and deadline are required" });
-    }
-
-    if (targetAmount <= 0) {
-      return res
-        .status(400)
-        .json({ message: "Target amount must be positive" });
-    }
-
-    if (new Date(deadline) < new Date()) {
-      return res
-        .status(400)
-        .json({ message: "Deadline must be in the future" });
-    }
-
-    if (goal.savedAmount > targetAmount) {
-      return res.status(400).json({
-        message: "Target amount cannot be less than saved amount",
-      });
-    }
-
-    goal.title = title;
-    goal.targetAmount = targetAmount;
-    goal.deadline = deadline;
-    goal.description = description || "";
-
-    await goal.save();
-
-    res.status(200).json({
-      message: "Goal updated successfully",
-      goal,
-    });
+    res.json({ message: "Goal updated", goal: updated });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -173,3 +125,4 @@ export const deleteGoal = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
