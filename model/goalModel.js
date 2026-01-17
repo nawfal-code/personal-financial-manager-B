@@ -7,30 +7,48 @@ const goalSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     title: {
       type: String,
       required: true,
     },
+
     targetAmount: {
       type: Number,
       required: true,
       min: 0,
     },
+
     savedAmount: {
       type: Number,
       default: 0,
       min: 0,
       validate: {
-        validator: function(value) {
+        validator: function (value) {
           return value <= this.targetAmount;
         },
         message: "Saved amount cannot exceed target amount",
       },
     },
-    deadline: {
-      type: Date,
+
+    // 🆕 DURATION-BASED GOAL
+    durationValue: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    durationUnit: {
+      type: String,
+      enum: ["months", "years"],
       required: true,
     },
+
+    startDate: {
+      type: Date,
+      default: Date.now,
+    },
+
     description: {
       type: String,
       default: "",
@@ -39,8 +57,7 @@ const goalSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Index for faster dashboard queries
-goalSchema.index({ userId: 1, deadline: 1 });
+goalSchema.index({ userId: 1 });
 
 const Goal = mongoose.model("Goal", goalSchema);
 
