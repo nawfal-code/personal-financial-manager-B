@@ -4,7 +4,6 @@ import authMiddleware from "../middleware/authMiddleware.js";
 import {
   addExpense,
   getExpenses,
-  filterExpenses,
   updateExpense,
   deleteExpense
 } from "../controllers/expenseController.js";
@@ -26,8 +25,6 @@ router.post("/", addExpense);
 // 2️⃣ Get all expenses of logged in user
 router.get("/", getExpenses);
 
-// 3️⃣ Filter by category/date (uses query params)
-router.get("/filter", filterExpenses);
 
 // 4️⃣ Update an expense
 router.put("/:id", updateExpense);
@@ -36,3 +33,4 @@ router.put("/:id", updateExpense);
 router.delete("/:id", deleteExpense);
 
 export default router;
+
