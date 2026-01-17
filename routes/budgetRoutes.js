@@ -6,7 +6,8 @@ import {
   getBudgets,
   updateBudgetSpentAmount,
   updateBudget,
-  deleteBudget
+  deleteBudget,
+  recalculateAllBudgets
 } from "../controllers/budgetController.js";
 
 const router = express.Router();
@@ -35,4 +36,8 @@ router.put("/:id", updateBudget);
 // 5️⃣ Delete budget
 router.delete("/:id", deleteBudget);
 
+// 6  Recalculate all budgets (NEW)
+router.patch("/recalculate-all", recalculateAllBudgets);
+
 export default router;
+
