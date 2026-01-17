@@ -14,8 +14,7 @@ const incomeSchema = new mongoose.Schema(
     },
     source: {
       type: String,
-      enum: ["Salary", "Business", "Investments", "Other"],
-      required: true,
+      required: true, // allow dynamic income types
     },
     date: {
       type: Date,
