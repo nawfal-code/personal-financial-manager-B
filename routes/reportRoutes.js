@@ -1,4 +1,3 @@
-// routes/reportRoutes.js
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
 import {
@@ -6,13 +5,13 @@ import {
   monthlyExpenses,
   budgetStatus,
   goalProgress,
-  getIncome
+  getIncome,
 } from "../controllers/reportController.js";
 
 const router = express.Router();
 
 /* ==========================
-   PROTECT ALL REPORT ROUTES
+   PROTECT ALL ROUTES
 ========================== */
 router.use(authMiddleware);
 
@@ -20,19 +19,17 @@ router.use(authMiddleware);
    REPORT ROUTES
 ========================== */
 
-// 1️⃣ Expenses grouped by category
+// Expenses
 router.get("/expenses/category", expenseByCategory);
-
-// 2️⃣ Monthly expense report
 router.get("/expenses/monthly", monthlyExpenses);
 
-// 3️⃣ Income report
+// Income
 router.get("/income", getIncome);
 
-// 4️⃣ Budget status report
+// ✅ Budget Report
 router.get("/budgets", budgetStatus);
 
-// 5️⃣ Goal progress report
+// ✅ Goal Report
 router.get("/goals", goalProgress);
 
 export default router;
