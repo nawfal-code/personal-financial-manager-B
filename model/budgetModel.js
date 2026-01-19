@@ -9,8 +9,8 @@ const budgetSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum:["Groceries", "Food", "Rent", "Transport", "Shopping", "Other"],
       required: true,
+      trim: true
     },
     limitAmount: {
       type: Number,
@@ -40,3 +40,4 @@ budgetSchema.index({ userId: 1, category: 1, period: 1 });
 const Budget = mongoose.model("Budget", budgetSchema);
 
 export default Budget;
+
